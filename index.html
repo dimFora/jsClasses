@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>function Parent and class ParentClass</title>
+</head>
+<body>
+    <script>
+        'use strict';
+
+        function Parent(name) {
+            this._name = name;
+        }
+
+        Parent.prototype = {
+            sayHello: function() {
+                alert( `Hello I am ${this._name}!` );
+            }
+        };
+
+//        let user1 = new Parent('Tim');
+//        let user2 = new Parent('Nik');
+//
+//        user1.sayHello();
+//        user2.sayHello();
+
+        function Child() {
+            Parent.apply(this, arguments);
+        }
+
+        Child.prototype = Object.create(Parent.prototype);
+        Child.prototype.sayGoodBye = function() {
+            alert( `Bye-Bye! From ${this._name}` );
+        };
+
+//        let child1 = new Child('Bob');
+//        let child2 = new Child('Rik');
+//
+//        child1.sayHello();
+//        child2.sayHello();
+//
+//        child1.sayGoodBye();
+//        child2.sayGoodBye();
+
+        //----------------- ES2015 ---------------//
+
+        class ParentClass {
+            constructor(name){
+                this._name = name;
+            }
+
+            //prototype methods
+            sayHello() {
+                alert( `Hello I am ${this._name}!` );
+            }
+
+            set surName(surname){
+                this._surname = surname;
+            }
+            get surName(){
+                return this._name;
+            }
+
+            get fullName(){
+                return `${this._name} ${this._surname}`
+            }
+
+            static create(name = '%username%') {
+                return new this(name);
+            }
+        }
+
+        let georgy = new ParentClass('Georgy');
+        georgy.surName = 'Ivanov';
+        georgy.sayHello();
+        alert( `fullName: ${georgy.surName}` );
+        alert( `fullName: ${georgy.fullName}` );
+
+        let classicUser = ParentClass.create();
+        classicUser.sayHello();
+
+        class ChildClass extends ParentClass{
+            constructor(){
+                super(...arguments);
+            }
+
+            sayGoodBye(){
+                super.sayHello();
+            }
+        }
+
+        let nikolas = new ChildClass('Nikolas');
+        nikolas.sayHello();
+        nikolas.sayGoodBye();
+
+        let unknown = ChildClass.create();
+        unknown.sayHello();
+        unknown.sayGoodBye();
+
+
+    </script>
+</body>
+</html>
